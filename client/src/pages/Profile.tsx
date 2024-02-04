@@ -9,35 +9,44 @@ import { useSelector } from "react-redux"
 import { app } from "../firebase"
 
 export default function Profile() {
+  //App states
   const [file, setFile] = useState(undefined)
   const [fileUploadError, setFileUploadError] = useState(false)
   const [filePercentage, setFilePercentage] = useState(0)
   const [formData, setFormData] = useState({})
-  console.log(file)
+  //End of app states
+
+  //App refs
   const fileRef = useRef(null)
+  //End of app refs
+
   const { currentUser } = useSelector((state: unknown) => state.user)
+
+  //Main function
   const handleFileUpload = (file) => {
-    const storage = getStorage(app)
-    const fileName = new Date().getTime() + file.name
-    const storageRef = ref(storage, fileName)
-    const uploadTask = uploadBytesResumable(storageRef, file)
+    const storage = getStorage(app) //Defining the storage by getStorage [firebase] and app inside firebase.tsx
+    const fileName = new Date().getTime() + file.name //To keep the file name unique because firebase won't allow to upload the same image twice if happens
+    const storageRef = ref(storage, fileName)  //Refering the storage [firebase] by using ref hook coming from firebase
+    const uploadTask = uploadBytesResumable(storageRef, file)  //Firebase function with the file state
 
     uploadTask.on(
-      "state_changed",
+      "state_changed", //update when the app state changes
       (snapshot) => {
         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
         setFilePercentage(Math.round(progress))
       },
       (error) => {
-        setFileUploadError(true)
+        setFileUploadError(true) //Upating the state to true incase of error
       },
       () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          setFormData({ ...formData, avatar: downloadURL })
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {  //Firebase function
+          setFormData({ ...formData, avatar: downloadURL })  //Spreading and returning the formData with avatar: downloadURL
         })
       }
     )
   }
+
+  //Using useEffect to update the image everytime the user uploads
   useEffect(() => {
     if (file) {
       handleFileUpload(file)
@@ -58,13 +67,16 @@ export default function Profile() {
         />
         <img
           onClick={() => fileRef.current.click()}
-          src={ formData.avatar || currentUser.avatar}
+          src={formData.avatar || currentUser.avatar}
           alt="profile"
           className="rounded-full h-24 w-24 object-cover cursor-pointer self-center mt-2"
         />
         <p className="self-center">
           {fileUploadError ? (
-            <span className="text-red-500">Error while uploading image (image should be of size less than 2mb)</span>
+            <span className="text-red-500">
+              Error while uploading image (image should be of size less than
+              2mb)
+            </span>
           ) : filePercentage > 0 && filePercentage < 100 ? (
             <span className="text-slate-500">Uploading {filePercentage}%</span>
           ) : filePercentage === 100 ? (
@@ -75,19 +87,19 @@ export default function Profile() {
         </p>
         <input
           type="text"
-          placeholder="username"
+          placeholder="Username"
           id="username"
           className="border p-3 rounded-lg"
         />
         <input
           type="email"
-          placeholder="email"
+          placeholder="Email"
           id="email"
           className="border p-3 rounded-lg"
         />
         <input
           type="text"
-          placeholder="password"
+          placeholder="Password"
           id="password"
           className="border p-3 rounded-lg"
         />
