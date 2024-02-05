@@ -3,6 +3,7 @@ import mongoose from "mongoose"
 import "dotenv/config"
 import userRouter from "./routes/user.route.js"
 import authRouter from "./routes/auth.route.js"
+import cookieParser from "cookie-parser"
 
 mongoose
   .connect(process.env.MONGOOSE_URI)
@@ -16,6 +17,7 @@ mongoose
 const app = express()
 
 app.use(express.json())
+app.use(cookieParser())
 
 app.listen(process.env.LOCAL_PORT, () => {
   console.log(`Server running on port:${process.env.LOCAL_PORT}`)
