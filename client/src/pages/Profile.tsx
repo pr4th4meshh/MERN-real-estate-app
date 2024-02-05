@@ -7,7 +7,17 @@ import {
 import { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { app } from "../firebase"
-import { deleteUserFailure, deleteUserStart, deleteUserSuccess, updateUserFailure, updateUserStart, updateUserSuccess } from "../slices/user/userSlice"
+import {
+  deleteUserFailure,
+  deleteUserStart,
+  deleteUserSuccess,
+  signOutUserFailure,
+  signOutUserStart,
+  signOutUserSuccess,
+  updateUserFailure,
+  updateUserStart,
+  updateUserSuccess,
+} from "../slices/user/userSlice"
 
 export default function Profile() {
   //App states
@@ -22,15 +32,17 @@ export default function Profile() {
   const fileRef = useRef(null)
   //End of app refs
 
-  const { currentUser, loading, error } = useSelector((state: unknown) => state.user)
+  const { currentUser, loading, error } = useSelector(
+    (state: unknown) => state.user
+  )
   const dispatch = useDispatch()
 
   //Main function
   const handleFileUpload = (file) => {
     const storage = getStorage(app) //Defining the storage by getStorage [firebase] and app inside firebase.tsx
     const fileName = new Date().getTime() + file.name //To keep the file name unique because firebase won't allow to upload the same image twice if happens
-    const storageRef = ref(storage, fileName)  //Refering the storage [firebase] by using ref hook coming from firebase
-    const uploadTask = uploadBytesResumable(storageRef, file)  //Firebase function with the file state
+    const storageRef = ref(storage, fileName) //Refering the storage [firebase] by using ref hook coming from firebase
+    const uploadTask = uploadBytesResumable(storageRef, file) //Firebase function with the file state
 
     uploadTask.on(
       "state_changed", //update when the app state changes
@@ -42,8 +54,9 @@ export default function Profile() {
         setFileUploadError(true) //Upating the state to true incase of error
       },
       () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {  //Firebase function
-          setFormData({ ...formData, avatar: downloadURL })  //Spreading and returning the formData with avatar: downloadURL
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          //Firebase function
+          setFormData({ ...formData, avatar: downloadURL }) //Spreading and returning the formData with avatar: downloadURL
         })
       }
     )
@@ -59,44 +72,59 @@ export default function Profile() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      dispatch(updateUserStart());
+      dispatch(updateUserStart())
       const res = await fetch(`/api/user/update/${currentUser._id}`, {
         method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       })
       const data = await res.json()
-      if(data.success === false) {
+      if (data.success === false) {
         dispatch(updateUserFailure(data.message))
-        return;
+        return
       }
       dispatch(updateUserSuccess(data))
       setUpdateSuccess(true)
     } catch (error) {
       dispatch(updateUserFailure(error.message))
     }
-  } 
+  }
 
   const handleChange = (e) => {
-    setFormData({...formData, [e.target.id]: e.target.value })
+    setFormData({ ...formData, [e.target.id]: e.target.value })
   }
 
   const handleDeleteUser = async () => {
     try {
       dispatch(deleteUserStart())
       const res = await fetch(`/api/user/delete/${currentUser._id}`, {
-        method: 'DELETE',
+        method: "DELETE",
       })
       const data = await res.json()
-      if(data.success === false) {
+      if (data.success === false) {
         dispatch(deleteUserFailure(data.message))
-        return;
+        return
       }
       dispatch(deleteUserSuccess(data))
     } catch (error) {
       dispatch(deleteUserFailure(error))
+    }
+  }
+
+  const handleSignOut = async () => {
+    try {
+      dispatch(signOutUserStart())
+      const res = await fetch("/api/auth/signout")
+      const data = await res.json()
+      if (data.success === false) {
+        dispatch(deleteUserFailure(data.message))
+        return
+      }
+      dispatch(signOutUserSuccess(data))
+    } catch (error) {
+      dispatch(deleteUserFailure(data.message))
     }
   }
 
@@ -155,16 +183,28 @@ export default function Profile() {
           className="border p-3 rounded-lg"
           onChange={handleChange}
         />
-        <button disabled={loading} className="bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80">
+        <button
+          disabled={loading}
+          className="bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80"
+        >
           {loading ? "loading..." : "Update"}
         </button>
       </form>
       <div className="flex justify-between mt-5">
-        <span onClick={handleDeleteUser} className="text-red-700 cursor-pointer">Delete account</span>
-        <span className="text-red-700 cursor-pointer">Sign out</span>
+        <span
+          onClick={handleDeleteUser}
+          className="text-red-700 cursor-pointer"
+        >
+          Delete account
+        </span>
+        <span onClick={handleSignOut} className="text-red-700 cursor-pointer">
+          Sign out
+        </span>
       </div>
-      <p className="text-red-500 text-sm">{error? error : ""}</p>
-      <p className="text-green-500 text-sm">{updateSuccess? "User updated successfully" : "" }</p>
+      <p className="text-red-500 text-sm">{error ? error : ""}</p>
+      <p className="text-green-500 text-sm">
+        {updateSuccess ? "User updated successfully" : ""}
+      </p>
     </div>
   )
 }
