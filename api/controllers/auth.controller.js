@@ -2,6 +2,7 @@ import User from "../models/user.model.js"
 import bcryptjs from "bcryptjs"
 import { errorHandler } from "../utils/error.js"
 import jwt from "jsonwebtoken"
+import Listing from "../models/listing.model.js"
 
 export const signup = async (req, res, next) => {
   const { username, email, password } = req.body
@@ -46,26 +47,42 @@ export const google = async (req, res, next) => {
         Math.random().toString(36).slice(-8)
       const hashedPassword = bcryptjs.hashSync(generatedPassword, 10)
       const newUser = new User({
-        username: req.body.name.split(" ").join("").toLowerCase() + Math.random().toString(36).slice(-4),
+        username:
+          req.body.name.split(" ").join("").toLowerCase() +
+          Math.random().toString(36).slice(-4),
         email: req.body.email,
         password: hashedPassword,
-        avatar: req.body.photo
+        avatar: req.body.photo,
       })
       await newUser.save()
-      const token = jwt.sign({id: newUser._id}, process.env.JWT_SECRET_KEY)
+      const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET_KEY)
       const { password: pass, ...rest } = newUser._doc
-      res.cookie("access_token", token, { httpOnly: true }).status(200).json(rest)
+      res
+        .cookie("access_token", token, { httpOnly: true })
+        .status(200)
+        .json(rest)
     }
   } catch (error) {
     next(error)
   }
 }
 
-export const signout = async (req,res, next) => {
+export const signout = async (req, res, next) => {
   try {
-    res.clearCookie("access_token");
-    res.status(200).json({message: "User has been deleted..."})
+    res.clearCookie("access_token")
+    res.status(200).json({ message: "User has been deleted..." })
   } catch (error) {
     next(error)
   }
+}
+
+export const getUserListings = async (req, res, next) => {
+    if (req.user.id === req.params.id){
+    try {
+      const listings = await Listing.find({userRef: req.params.id})
+      res.status(200).json(listings)
+  } catch (error) {
+    return next(errorHandler(401, "You can only view your own listings!"))
+  }
+}
 }
