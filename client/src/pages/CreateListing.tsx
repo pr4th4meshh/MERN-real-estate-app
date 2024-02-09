@@ -299,7 +299,7 @@ const CreateListing = () => {
                 <input
                   type="number"
                   name=""
-                  id="discountedPrice"
+                  id="discountPrice"
                   min="0"
                   max="10000000"
                   required
