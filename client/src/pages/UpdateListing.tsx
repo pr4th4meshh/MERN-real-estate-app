@@ -375,7 +375,7 @@ import {
                 </div>
               ))}
             <button disabled={loading || uploading} className="p-3 bg-slate-700 text-white rounded-lg hover:opacity-95">
-              {loading ? "Creating..." : "Update Listing"}
+            {loading ? 'Updating...' : 'Update listing'}
             </button>
           </div>
         </form>
