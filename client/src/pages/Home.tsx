@@ -6,6 +6,13 @@ import SwiperCore from "swiper"
 import "swiper/css/bundle"
 import ListingItem from "../components/ListingItem"
 
+interface ListingItemType {
+  listing: string
+  _id: string
+  imageUrls: string
+  name: string
+}
+
 export default function Home() {
   const [offerListings, setOfferListings] = useState([])
   const [saleListings, setSaleListings] = useState([])
@@ -40,7 +47,7 @@ export default function Home() {
         const data = await res.json()
         setSaleListings(data)
       } catch (error) {
-        log(error)
+        console.log(error)
       }
     }
     fetchOfferListings()
@@ -72,7 +79,7 @@ export default function Home() {
       <Swiper navigation>
         {offerListings &&
           offerListings.length > 0 &&
-          offerListings.map((listing) => (
+          offerListings.map((listing: ListingItemType) => (
             <SwiperSlide>
               <div
                 style={{
@@ -103,7 +110,7 @@ export default function Home() {
               </Link>
             </div>
             <div className="flex flex-wrap gap-4">
-              {offerListings.map((listing) => (
+              {offerListings.map((listing: ListingItemType) => (
                 <ListingItem listing={listing} key={listing._id} />
               ))}
             </div>
@@ -123,7 +130,7 @@ export default function Home() {
               </Link>
             </div>
             <div className="flex flex-wrap gap-4">
-              {rentListings.map((listing) => (
+              {rentListings.map((listing: ListingItemType) => (
                 <ListingItem listing={listing} key={listing._id} />
               ))}
             </div>
@@ -143,7 +150,7 @@ export default function Home() {
               </Link>
             </div>
             <div className="flex flex-wrap gap-4">
-              {saleListings.map((listing) => (
+              {saleListings.map((listing: ListingItemType) => (
                 <ListingItem listing={listing} key={listing._id} />
               ))}
             </div>

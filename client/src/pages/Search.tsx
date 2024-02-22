@@ -1,6 +1,21 @@
-import { useEffect, useState } from "react"
+import { ChangeEvent, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import ListingItem from "../components/ListingItem"
+
+interface DataItemsType {
+  listings: string,
+  _id: string
+}
+
+// interface SidebarDataType {
+//   parking: boolean | string,
+//   furnished: boolean | string,
+//   offer: boolean | string,
+//   searchTerm: string,
+//   type: string | unknown,
+//   sort: string,
+//   order: string
+// }
 
 export default function Search() {
   const navigate = useNavigate()
@@ -15,7 +30,7 @@ export default function Search() {
   })
 
   const [loading, setLoading] = useState(false)
-  const [listings, setListings] = useState([])
+  const [listings, setListings] = useState<DataItemsType[]>([])
   const [showMore, setShowMore] = useState(false)
 
   useEffect(() => {
@@ -64,11 +79,11 @@ export default function Search() {
     }
 
     fetchListings()
-  }, [location.search])
+  }, [])
 
   const onShowMoreClick = async () => {
     const numberOfListings = listings.length
-    const startIndex = numberOfListings
+    const startIndex = numberOfListings.toString()
     const urlParams = new URLSearchParams(location.search)
     urlParams.set("startIndex", startIndex)
     const searchQuery = urlParams.toString()
@@ -80,7 +95,7 @@ export default function Search() {
     setListings([...listings, ...data])
   }
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement> | React.ChangeEvent<HTMLSelectElement>) => {
     if (
       e.target.id === "all" ||
       e.target.id === "rent" ||
@@ -114,7 +129,7 @@ export default function Search() {
     }
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e:ChangeEvent<HTMLFormElement>) => {
     e.preventDefault()
     const urlParams = new URLSearchParams()
     urlParams.set("searchTerm", sidebardata.searchTerm)

@@ -4,14 +4,13 @@ import {
   ref,
   uploadBytesResumable,
 } from "firebase/storage"
-import { useEffect, useRef, useState } from "react"
+import { ChangeEvent, useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { app } from "../firebase"
 import {
   deleteUserFailure,
   deleteUserStart,
   deleteUserSuccess,
-  signOutUserFailure,
   signOutUserStart,
   signOutUserSuccess,
   updateUserFailure,
@@ -20,12 +19,42 @@ import {
 } from "../slices/user/userSlice"
 import { Link } from "react-router-dom"
 
+interface ListingItemType {
+  listing: string
+  _id: string
+  imageUrls: string
+  name: string
+}
+
+interface User {
+  avatar: string
+  _id: string
+  username: string
+  email: string
+  // other user properties
+}
+
+interface UserState {
+  currentUser: User
+  loading: boolean
+  error: string
+  // other user-related state properties
+}
+
+interface FormDataType {
+  avatar: string
+}
+
+interface RootState {
+  user: UserState
+}
+
 export default function Profile() {
   //App states
   const [file, setFile] = useState(undefined)
   const [fileUploadError, setFileUploadError] = useState(false)
   const [filePercentage, setFilePercentage] = useState(0)
-  const [formData, setFormData] = useState({})
+  const [formData, setFormData] = useState<FormDataType>({})
   const [updateSuccess, setUpdateSuccess] = useState(false)
   const [showListingsError, setShowListingsError] = useState(false);
   const [userListings, setUserListings] = useState([]);
@@ -36,12 +65,12 @@ export default function Profile() {
   //End of app refs
 
   const { currentUser, loading, error } = useSelector(
-    (state: unknown) => state.user
+    (state: RootState) => state.user
   )
   const dispatch = useDispatch()
 
   //Main function
-  const handleFileUpload = (file) => {
+  const handleFileUpload = (file: File) => {
     const storage = getStorage(app) //Defining the storage by getStorage [firebase] and app inside firebase.tsx
     const fileName = new Date().getTime() + file.name //To keep the file name unique because firebase won't allow to upload the same image twice if happens
     const storageRef = ref(storage, fileName) //Refering the storage [firebase] by using ref hook coming from firebase
@@ -53,7 +82,7 @@ export default function Profile() {
         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
         setFilePercentage(Math.round(progress))
       },
-      (error) => {
+      () => {
         setFileUploadError(true) //Upating the state to true incase of error
       },
       () => {
@@ -70,9 +99,9 @@ export default function Profile() {
     if (file) {
       handleFileUpload(file)
     }
-  }, [file])
+  })
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault()
     try {
       dispatch(updateUserStart())
@@ -95,8 +124,8 @@ export default function Profile() {
     }
   }
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.id]: e.target.value })
+  const handleChange = (e:React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement> | React.ChangeEvent<HTMLSelectElement>) => {
+    setFormData({ ...formData, [e.target.id]: e.currentTarget.value })
   }
 
   const handleDeleteUser = async () => {
@@ -127,7 +156,7 @@ export default function Profile() {
       }
       dispatch(signOutUserSuccess(data))
     } catch (error) {
-      dispatch(deleteUserFailure(data.message))
+      dispatch(deleteUserFailure(error.message))
     }
   }
 
@@ -157,7 +186,7 @@ export default function Profile() {
         console.log(data.message)
         return;
       }
-      setUserListings((prev) => prev.filter((listing) => listing._id !== listingId))
+      setUserListings((prev) => prev.filter((listing: ListingItemType) => listing._id !== listingId))
     } catch (error) {
       console.log(error)
     }
@@ -168,7 +197,7 @@ export default function Profile() {
       <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <input
-          onChange={(e) => setFile(e.target.files[0])}
+          onChange={(e:React.FormEvent<HTMLInputElement>) => setFile(e.target.files[0])}
           type="file"
           ref={fileRef}
           id=""
@@ -176,7 +205,7 @@ export default function Profile() {
           accept="image/*"
         />
         <img
-          onClick={() => fileRef.current.click()}
+          onClick={() => fileRef.current && fileRef.current.click()}
           src={formData.avatar || currentUser.avatar}
           alt="profile"
           className="rounded-full h-24 w-24 object-cover cursor-pointer self-center mt-2"
@@ -254,7 +283,7 @@ export default function Profile() {
         userListings.length > 0 &&
         <div className="flex flex-col gap-4">
           <h1 className='text-center mt-7 text-2xl font-semibold'>Your Listings</h1>
-          {userListings.map((listing) => (
+          {userListings.map((listing: ListingItemType) => (
             <div
               key={listing._id}
               className='border rounded-lg p-3 flex justify-between items-center gap-4'

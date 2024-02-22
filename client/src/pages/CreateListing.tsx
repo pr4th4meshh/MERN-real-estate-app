@@ -4,10 +4,26 @@ import {
   ref,
   uploadBytesResumable,
 } from "firebase/storage"
-import { useState } from "react"
+import React, { ChangeEvent, useState } from "react"
 import { app } from "../firebase"
 import { useNavigate } from "react-router-dom"
 import { useSelector } from "react-redux"
+
+interface User {
+  _id: string
+  username: string
+  email: string
+  // other user properties
+}
+
+interface UserState {
+  currentUser: User
+  // other user-related state properties
+}
+
+interface RootState {
+  user: UserState
+}
 
 const CreateListing = () => {
   const [files, setFiles] = useState([])
@@ -25,18 +41,20 @@ const CreateListing = () => {
     parking: false,
     furnished: false,
   })
-  const [imageUploadError, setImageUploadError] = useState(false)
+  const [imageUploadError, setImageUploadError] = useState<boolean | string>(false)
   const [uploading, setUploading] = useState(false)
   const [error, setError] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  const { currentUser } = useSelector((state) => state.user)
+  console.log(error)
+
+  const { currentUser } = useSelector((state: RootState) => state.user)
 
   const navigate = useNavigate()
 
   console.log(formData)
 
-  const handleChange = (e) => {
+  const handleChange = (e:ChangeEvent<HTMLInputElement>) => {
     if (e.target.id === "sale" || e.target.id === "rent") {
       setFormData({
         ...formData,
@@ -67,7 +85,7 @@ const CreateListing = () => {
     }
   }
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault()
     try {
       if (formData.imageUrls.length < 1) return setError(true)
@@ -97,7 +115,7 @@ const CreateListing = () => {
     }
   }
 
-  const handleImageSubmit = (e) => {
+  const handleImageSubmit = () => {
     if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
       setUploading(true);
       setImageUploadError(false);
@@ -114,7 +132,7 @@ const CreateListing = () => {
           setImageUploadError(false);
           setUploading(false);
         })
-        .catch((err) => {
+        .catch(() => {
           setImageUploadError('Image upload failed (2 mb max per image)');
           setUploading(false);
         });
@@ -124,7 +142,7 @@ const CreateListing = () => {
     }
   };
 
-  const storeImage = async (file) => {
+  const storeImage = async (file:File) => {
     return new Promise((resolve, reject) => {
       const storage = getStorage(app)
       const fileName = new Date().getTime() + file.name
@@ -135,6 +153,7 @@ const CreateListing = () => {
         (snapshot) => {
           const progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+            console.log(progress)
         },
         (error) => {
           reject(error)
@@ -148,7 +167,7 @@ const CreateListing = () => {
     })
   }
 
-  const handleRemoveImage = (index) => {
+  const handleRemoveImage = (index: string | number) => {
     setFormData({
       ...formData,
       imageUrls: formData.imageUrls.filter((_, i) => i !== index),
@@ -332,7 +351,7 @@ const CreateListing = () => {
               id="images"
               accept="image/*"
               multiple
-              onChange={(e) => setFiles(e.target.files)}
+              onChange={(e: React.FormEvent<HTMLInputElement>) => setFiles(e.target.files)}
             />
             <button
               disabled={uploading}
