@@ -22,7 +22,7 @@ Real-Estate app using the MERN stack. Built with React-TypeScript for the front-
 - Add Property: Registered users can add properties for rent or sale.
 - Contact Owner: Users can contact property owners through email provided in the listings.
 - Manage Profile: Users can edit their profiles and manage their property listings.
-- Edit Listings: Users can edit their property listings by navigating to their profile.
+- Edit Listings: Users can edit their property listings by navigating to their profile and editing.
 
 ## Screenshots of the project
 
