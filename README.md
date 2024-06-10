@@ -27,28 +27,37 @@ Real-Estate app using the MERN stack. Built with React-TypeScript for the front-
 ## Screenshots of the project
 
 ## Home Page
-![Home page](<Screenshot 2024-06-10 192640.png>)
+![Home page](![Screenshot 2024-06-10 192640](https://github.com/pr4th4meshh/MERN-real-estate-app/assets/87704191/a5610207-3421-477e-8c1b-fe5e6d7d04a7)
+)
 
 ## About Page
-![About page](<Screenshot 2024-06-10 192842.png>)
+![About page](![Screenshot 2024-06-10 192842](https://github.com/pr4th4meshh/MERN-real-estate-app/assets/87704191/ceeb7489-a60f-4c66-8648-7741cafb8a4c)
+)
 
 ## Explore Page
-![Explore more properties](<Screenshot 2024-06-10 192816.png>)
+![Explore more properties](![Screenshot 2024-06-10 192816](https://github.com/pr4th4meshh/MERN-real-estate-app/assets/87704191/921703cd-19ab-4be5-9051-d24502223b2c)
+)
 
 ## Offer Carousel Page
-![Offer carousel](<Screenshot 2024-06-10 192711.png>)
+![Offer carousel](![Screenshot 2024-06-10 192711](https://github.com/pr4th4meshh/MERN-real-estate-app/assets/87704191/40093c3a-257f-491d-9f35-2224d13dc484)
+)
 
 ## Property on Rent
-![Rent properties](<Screenshot 2024-06-10 192737.png>)
+![Rent properties](![Screenshot 2024-06-10 192724](https://github.com/pr4th4meshh/MERN-real-estate-app/assets/87704191/f1ded595-d0ea-4045-8edd-15cd27b83fe3)
+)
 
 ## Property on Offer
-![Offers](<Screenshot 2024-06-10 192724.png>)
+![Offers](![Screenshot 2024-06-10 192737](https://github.com/pr4th4meshh/MERN-real-estate-app/assets/87704191/de6f0495-4f4d-4394-af2a-3cba869d0b67)
+)
 
 ## Property on Sale
-![Sale properties](<Screenshot 2024-06-10 192758.png>)
+![Sale properties](![Screenshot 2024-06-10 192758](https://github.com/pr4th4meshh/MERN-real-estate-app/assets/87704191/8f233efe-70e1-466f-a352-77a00c6bd77a)
+)
 
 ## Profile Page
-![Profile page](<Screenshot 2024-06-10 193003.png>)
+![Profile page](![Screenshot 2024-06-10 193003](https://github.com/pr4th4meshh/MERN-real-estate-app/assets/87704191/9ddb0817-859f-4fc0-92ba-1c582d8b2e89)
+)
 
 ## Listings Edit Page
-![Edit listings](<Screenshot 2024-06-10 193026.png>)
+![Edit listings](![Screenshot 2024-06-10 193026](https://github.com/pr4th4meshh/MERN-real-estate-app/assets/87704191/4e70a7d6-4b56-4b9e-b738-e1eb06745ecd)
+)
