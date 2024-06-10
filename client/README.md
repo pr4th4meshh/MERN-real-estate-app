@@ -1,30 +1,54 @@
-# React + TypeScript + Vite
+# Real Estate App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Real-Estate app using the MERN stack. Built with React-TypeScript for the front-end and JavaScript for the back-end, this application allows users to add properties for rent or sale and contact property owners via email.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Property Listings:** Users can view properties available for rent, sale, or offer.
+- **Property Owners:** Users can become property owners and add their properties for others to see.
+- **Contact Owners:** Users can contact property owners directly via email.
+- **User Authentication:** Secure login and registration for users and property owners.
+- **Profile Management:** Users can manage their profiles and property listings.
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- **Frontend:** React with TypeScript, Tailwind CSS, Ant Design
+- **Backend:** Node.js, Express.js, MongoDB
+- **State Management:** Redux, RTK Query
+- **API Testing:** Insomnia
 
-- Configure the top-level `parserOptions` property like this:
+## Usage
+- Register/Login: Users can register or login to access more features.
+- Add Property: Registered users can add properties for rent or sale.
+- Contact Owner: Users can contact property owners through email provided in the listings.
+- Manage Profile: Users can edit their profiles and manage their property listings.
+- Edit Listings: Users can edit their property listings by navigating to their profile.
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+## Screenshots of the project
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+## Home Page
+![Home page](<Screenshot 2024-06-10 192640.png>)
+
+## About Page
+![About page](<Screenshot 2024-06-10 192842.png>)
+
+## Explore Page
+![Explore more properties](<Screenshot 2024-06-10 192816.png>)
+
+## Offer Carousel Page
+![Offer carousel](<Screenshot 2024-06-10 192711.png>)
+
+## Property on Rent
+![Rent properties](<Screenshot 2024-06-10 192737.png>)
+
+## Property on Offer
+![Offers](<Screenshot 2024-06-10 192724.png>)
+
+## Property on Sale
+![Sale properties](<Screenshot 2024-06-10 192758.png>)
+
+## Profile Page
+![Profile page](<Screenshot 2024-06-10 193003.png>)
+
+## Listings Edit Page
+![Edit listings](<Screenshot 2024-06-10 193026.png>)

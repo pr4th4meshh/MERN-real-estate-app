@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperCore from 'swiper';
-import { Navigation } from 'swiper/modules';
+import { Autoplay, Navigation } from 'swiper/modules';
 import 'swiper/css/bundle';
 
 import {
@@ -18,7 +18,7 @@ import { useSelector } from 'react-redux';
 import Contact from '../components/Contact';
 
 export default function Listing() {
-  SwiperCore.use([Navigation]);
+  SwiperCore.use([Navigation, Autoplay]);
   const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -58,8 +58,8 @@ export default function Listing() {
         <p className='text-center my-7 text-2xl'>Something went wrong!</p>
       )}
       {listing && !loading && !error && (
-        <div>
-          <Swiper navigation>
+        <div className='max-w-6xl mx-auto'>
+          <Swiper loop autoplay navigation>
             {listing.imageUrls.map((url) => (
               <SwiperSlide key={url}>
                 <div
